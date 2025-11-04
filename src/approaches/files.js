@@ -1,4 +1,4 @@
-import * as fs from "fs/promises";
+import * as fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -7,9 +7,9 @@ const moduleFolder = path.dirname(fileURLToPath(import.meta.url));
 const markdownFolder = path.resolve(moduleFolder, "markdown");
 
 // Display the files in the console.
-const filenames = await fs.readdir(markdownFolder);
+const filenames = fs.readdirSync(markdownFolder);
 for (const filename of filenames) {
   const filePath = path.join(markdownFolder, filename);
-  const content = await fs.readFile(filePath);
+  const content = fs.readFileSync(filePath);
   console.log(`${filename}: ${content}`);
 }

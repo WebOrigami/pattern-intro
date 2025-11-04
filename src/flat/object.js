@@ -5,11 +5,11 @@ const obj = {
 };
 
 export default {
-  async get(key) {
+  get(key) {
     return obj[key];
   },
 
-  async keys() {
-    return Object.keys(obj);
+  *keys() {
+    yield* Object.keys(obj);
   },
 };

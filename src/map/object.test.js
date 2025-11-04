@@ -2,7 +2,7 @@ import assert from "node:assert";
 import test from "node:test";
 import tree from "./object.js";
 
-test("can get the keys of the tree", () => {
+test("can get the keys of the map", () => {
   assert.deepEqual(Array.from(tree.keys()), ["Alice.md", "Bob.md", "Carol.md"]);
 });
 
