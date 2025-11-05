@@ -1,4 +1,6 @@
-export default class ObjectMap extends Map {
+import SyncMap from "./SyncMap.js";
+
+export default class ObjectMap extends SyncMap {
   constructor(object) {
     super();
     this.object = object;

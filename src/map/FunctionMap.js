@@ -1,4 +1,6 @@
-export default class FunctionMap extends Map {
+import SyncMap from "./SyncMap.js";
+
+export default class FunctionMap extends SyncMap {
   constructor(fn, domain) {
     super();
     this.fn = fn;

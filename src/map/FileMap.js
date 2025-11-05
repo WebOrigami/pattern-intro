@@ -1,7 +1,8 @@
 import * as fs from "node:fs";
 import path from "node:path";
+import SyncMap from "./SyncMap.js";
 
-export default class FileMap extends Map {
+export default class FileMap extends SyncMap {
   constructor(dirname) {
     super();
     this.dirname = path.resolve(process.cwd(), dirname);
