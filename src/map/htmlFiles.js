@@ -1,4 +1,4 @@
-import tree from "./files.js";
-import HtmlMapTransform from "./HtmlMapTransform.js";
+import fileMap from "./files.js";
+import HtmlMap from "./HtmlMap.js";
 
-export default new HtmlMapTransform(tree);
+export default new HtmlMap(fileMap);

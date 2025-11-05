@@ -2,10 +2,10 @@ import FunctionMap from "./FunctionMap.js";
 
 export default new FunctionMap(
   (key) => {
-    if (key.endsWith(".md")) {
-      const name = key.slice(0, -3);
-      return `Hello, **${name}**.`;
+    const match = /.+(?<number>\d+)\.md/.exec(key);
+    if (match) {
+      return `This is **post ${match.groups.number}**.`;
     }
   },
-  ["Alice.md", "Bob.md", "Carol.md"]
+  ["post1.md", "post2.md", "post3.md"]
 );

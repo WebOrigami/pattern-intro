@@ -1,6 +1,6 @@
 import { marked } from "marked";
 
-export default class HtmlMapTransform extends Map {
+export default class HtmlMap extends Map {
   constructor(markdownMap) {
     super();
     this.source = markdownMap;

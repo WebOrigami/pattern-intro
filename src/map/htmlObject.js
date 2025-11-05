@@ -1,4 +1,4 @@
-import HtmlMapTransform from "./HtmlMapTransform.js";
-import tree from "./object.js";
+import HtmlMapTransform from "./HtmlMap.js";
+import objectMap from "./object.js";
 
-export default new HtmlMapTransform(tree);
+export default new HtmlMapTransform(objectMap);
