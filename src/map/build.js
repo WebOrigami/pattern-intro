@@ -3,4 +3,4 @@ import copy from "./copy.js";
 import site from "./site.js";
 
 builtFiles.clear();
-copy(builtFiles, site);
+copy(site, builtFiles);

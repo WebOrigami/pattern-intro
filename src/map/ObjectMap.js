@@ -7,7 +7,10 @@ export default class ObjectMap extends SyncMap {
   }
 
   get(key) {
-    return this.object[key];
+    const value = this.object[key];
+    return value instanceof Map || typeof value !== "object"
+      ? value
+      : new this.constructor(value);
   }
 
   *keys() {

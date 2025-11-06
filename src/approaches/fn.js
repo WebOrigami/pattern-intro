@@ -1,10 +1,10 @@
-const domain = ["Alice.md", "Bob.md", "Carol.md"];
+const domain = ["post1.md", "post2.md", "post3.md"];
 
-// Function to generate markdown for a key of the format "Alice.md"
+// Function to generate markdown for a key of the format "post<n>.md"
 function fn(key) {
-  if (key.endsWith(".md")) {
-    const name = key.slice(0, -3);
-    return `Hello, **${name}**.`;
+  const match = /.+(?<number>\d+)\.md/.exec(key);
+  if (match) {
+    return `This is **post ${match.groups.number}**.`;
   }
 }
 

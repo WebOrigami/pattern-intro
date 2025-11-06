@@ -47,7 +47,7 @@ export default class FileMap extends SyncMap {
     // Ensure this directory exists before writing out the file
     fs.mkdirSync(this.dirname, { recursive: true });
     const destPath = path.resolve(this.dirname, key ?? "");
-    if (value instanceof Map && value.size === 0) {
+    if (value === FileMap.EMPTY) {
       // Create empty subdirectory
       fs.mkdirSync(destPath, { recursive: true });
     } else {

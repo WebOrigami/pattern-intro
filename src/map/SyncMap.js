@@ -14,6 +14,9 @@ export default class SyncMap extends Map {
     throw new Error("SyncMap: map is read-only");
   }
 
+  // Used to create empty submaps
+  static EMPTY = Symbol("EMPTY");
+
   // Override entries() method to call overridden get() and keys()
   *entries() {
     for (const key of this.keys()) {

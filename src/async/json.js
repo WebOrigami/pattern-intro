@@ -2,13 +2,20 @@ import path from "node:path";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
 
-// Resolve a map to an object with string keys and string values.
-function plain(map) {
+// Resolve an async map to an object with string keys and string values.
+async function plain(tree) {
   const result = {};
-  // Get each of the values from the map.
-  for (const key of map.keys()) {
-    const value = map.get(key);
-    result[key] = value instanceof Map ? plain(value) : value.toString();
+  // Get each of the values from the tree.
+  for await (const key of tree.keys()) {
+    const value = await tree.get(key);
+
+    // Is the value itself map-like?
+    const isMap =
+      typeof value?.get === "function" && typeof value?.keys === "function";
+
+    result[key.toString()] = isMap
+      ? await plain(value) // Recurse into subtree.
+      : value.toString();
   }
   return result;
 }
@@ -27,7 +34,7 @@ const module = await import(moduleUrl);
 const tree = module.default;
 
 // Resolve the tree to an in-memory object.
-const obj = plain(tree);
+const obj = await plain(tree);
 
 // Convert to JSON text and display it.
 const json = JSON.stringify(obj, null, 2);
