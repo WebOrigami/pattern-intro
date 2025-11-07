@@ -10,8 +10,15 @@ export default class FileMap extends SyncMap {
 
   delete(key) {
     const destPath = path.resolve(this.dirname, key);
-    fs.rmSync(destPath, { force: true, recursive: true });
-    return true;
+    try {
+      fs.rmSync(destPath, { recursive: true });
+      return true;
+    } catch (/** @type {any} */ error) {
+      if (error.code === "ENOENT") {
+        return false; // File or directory didn't exist
+      }
+      throw error;
+    }
   }
 
   get(key) {
@@ -44,13 +51,13 @@ export default class FileMap extends SyncMap {
   }
 
   set(key, value) {
-    // Ensure this directory exists before writing out the file
-    fs.mkdirSync(this.dirname, { recursive: true });
-    const destPath = path.resolve(this.dirname, key ?? "");
-    if (value === FileMap.EMPTY) {
+    const destPath = path.resolve(this.dirname, key);
+    if (value === this.constructor.EMPTY) {
       // Create empty subdirectory
       fs.mkdirSync(destPath, { recursive: true });
     } else {
+      // Ensure this directory exists before writing out the file
+      fs.mkdirSync(this.dirname, { recursive: true });
       // Write file
       fs.writeFileSync(destPath, value);
     }

@@ -20,7 +20,8 @@ export default class SyncMap extends Map {
   // Override entries() method to call overridden get() and keys()
   *entries() {
     for (const key of this.keys()) {
-      yield [key, this.get(key)];
+      const value = this.get(key);
+      yield [key, value];
     }
   }
 
@@ -53,7 +54,8 @@ export default class SyncMap extends Map {
   // Override values() to call overridden get() and keys()
   *values() {
     for (const key of this.keys()) {
-      yield this.get(key);
+      const value = this.get(key);
+      yield value;
     }
   }
 }
