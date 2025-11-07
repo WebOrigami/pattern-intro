@@ -1,4 +1,4 @@
-import HtmlMapTransform from "./HtmlMap.js";
+import HtmlMap from "./HtmlMap.js";
 import objectMap from "./object.js";
 
-export default new HtmlMapTransform(objectMap);
+export default new HtmlMap(objectMap);

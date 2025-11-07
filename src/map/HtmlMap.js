@@ -8,17 +8,21 @@ export default class HtmlMap extends SyncMap {
   }
 
   get(key) {
-    if (!key.endsWith(".html")) {
-      return undefined;
-    }
-    const markdownKey = key.replace(/\.html$/, ".md");
-    const markdown = this.source.get(markdownKey);
-    return markdown ? marked(markdown.toString()) : undefined;
+    const sourceKey = key.replace(/\.html$/, ".md");
+    const sourceValue = this.source.get(sourceKey);
+    const resultValue =
+      sourceValue && key.endsWith(".html")
+        ? marked(sourceValue.toString())
+        : sourceValue instanceof Map
+        ? new this.constructor(sourceValue)
+        : undefined;
+    return resultValue;
   }
 
   *keys() {
-    for (const markdownKey of this.source.keys()) {
-      yield markdownKey.replace(/\.md$/, ".html");
+    for (const sourceKey of this.source.keys()) {
+      const resultKey = sourceKey.replace(/\.md$/, ".html");
+      yield resultKey;
     }
   }
 }
