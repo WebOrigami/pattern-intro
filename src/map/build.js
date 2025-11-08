@@ -1,6 +1,6 @@
-import builtFiles from "./builtFiles.js";
+import buildFiles from "./buildFiles.js";
 import copy from "./copy.js";
 import site from "./site.js";
 
-builtFiles.clear();
-copy(site, builtFiles);
+buildFiles.clear();
+copy(site, buildFiles);

@@ -1,5 +1,5 @@
 import http from "node:http";
-import siteMap from "./site.js";
+import site from "./site.js";
 
 const port = 5000;
 
@@ -22,26 +22,20 @@ function requestListener(map) {
   return function (request, response) {
     console.log(request.url);
     const keys = keysFromUrl(request.url);
-    let value;
+    let resource;
     try {
-      value = traverse(map, ...keys);
+      resource = traverse(map, ...keys);
     } catch (error) {
       console.log(error.message);
     }
 
-    const isAsyncDictionary =
-      typeof value?.get === "function" && typeof value?.keys === "function";
-
-    if (isAsyncDictionary) {
-      // Redirect to the root of the async tree.
-      response.writeHead(307, { Location: `${request.url}/` });
-      response.end("ok");
-      return true;
-    } else if (value !== undefined) {
+    if (resource) {
+      // Send to client
       response.writeHead(200, { "Content-Type": "text/html" });
-      response.end(value);
+      response.end(resource);
       return true;
     } else {
+      // Not found
       response.writeHead(404, { "Content-Type": "text/html" });
       response.end(`Not found`, "utf-8");
       return false;
@@ -63,7 +57,7 @@ function traverse(map, ...keys) {
 }
 
 // Start the server.
-const server = http.createServer(requestListener(siteMap));
+const server = http.createServer(requestListener(site));
 server.listen(port, undefined, () => {
   console.log(
     `Server running at http://localhost:${port}. Press Ctrl+C to stop.`
