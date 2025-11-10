@@ -6,8 +6,8 @@ export default function copy(source, target) {
       let targetValue = target.get(key);
       if (targetValue === undefined) {
         // Target key doesn't exist; create empty subtree
-        const empty = target.constructor.EMPTY ?? new target.constructor();
-        target.set(key, empty);
+        target.set(key, {});
+        // Retrieve the newly created subtree
         targetValue = target.get(key);
       }
       copy(sourceValue, targetValue);

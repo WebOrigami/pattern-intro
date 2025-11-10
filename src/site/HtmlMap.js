@@ -1,6 +1,7 @@
 import { marked } from "marked";
+import SyncMap from "./SyncMap.js";
 
-export default class HtmlMap extends Map {
+export default class HtmlMap extends SyncMap {
   constructor(markdownMap) {
     super();
     this.source = markdownMap;
@@ -12,6 +13,8 @@ export default class HtmlMap extends Map {
     const resultValue =
       sourceValue && key.endsWith(".html")
         ? marked(sourceValue.toString())
+        : sourceValue instanceof Map
+        ? new this.constructor(sourceValue)
         : undefined;
     return resultValue;
   }
