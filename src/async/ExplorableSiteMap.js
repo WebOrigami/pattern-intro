@@ -1,56 +1,46 @@
-import SiteMap from "./SiteMap.js";
+import AsyncMap from "./AsyncMap.js";
+
+const textMediaTypes = [
+  "application/json",
+  "application/xml",
+  "text/css",
+  "text/html",
+  "text/markdown",
+  "text/plain",
+];
 
 /**
- * A [SiteMap](SiteMap.html) that implements the [JSON Keys](jsonKeys.html)
- * protocol. This enables a `keys()` method that can return the keys of a site
- * route even though such a mechanism is not built into the HTTP protocol.
+ * An asynchronous map representation of a site area that implements the [JSON
+ * Keys](https://weborigami.org/async-tree/jsonkeys.html) protocol.
  */
-export default class ExplorableSiteMap extends SiteMap {
-  /**
-   * @param {string} href
-   */
+export default class ExplorableSiteMap extends AsyncMap {
   constructor(href) {
-    super(href);
-    this.serverKeysPromise = undefined;
+    super();
+    this.href = href;
   }
 
-  /**
-   * @returns {Promise<string[]>}
-   */
-  async getServerKeys() {
-    // We use a promise to ensure we only check for keys once.
-    const href = new URL(".keys.json", this.href).href;
-    this.serverKeysPromise ??= fetch(href)
-      .then((response) => (response.ok ? response.text() : null))
-      .then((text) => {
-        try {
-          return text ? JSON.parse(text) : [];
-        } catch (error) {
-          // Got a response, but it's not JSON. Most likely the site doesn't
-          // actually have a .keys.json file, and is returning a Not Found page,
-          // but hasn't set the correct 404 status code.
-          return [];
-        }
-      });
-    return this.serverKeysPromise;
-  }
-
-  /**
-   * Returns the keys of the site route. For this to work, the route must have a
-   * `.keys.json` file that contains a JSON array of string keys.
-   */
-  async *keys() {
-    const serverKeys = await this.getServerKeys();
-    yield* serverKeys;
-  }
-
-  processResponse(response) {
-    // If the response was redirected to a route that ends with a slash, and the
-    // site is an explorable site, we return a tree for the new route.
-    if (response.ok && response.redirected && response.url.endsWith("/")) {
-      return Reflect.construct(this.constructor, [response.url]);
+  async get(key) {
+    // Extend the URL with the key and fetch the resource
+    const href = new URL(key, this.href).href;
+    const response = await fetch(href);
+    if (!response.ok) {
+      return undefined;
     }
+    // If a known text type, return the text; otherwise return an ArrayBuffer
+    const mediaType = response.headers?.get("Content-Type")?.split(";")[0];
+    const value = textMediaTypes.includes(mediaType)
+      ? await response.text()
+      : await response.arrayBuffer();
+    return value;
+  }
 
-    return super.processResponse(response);
+  async *keys() {
+    // Save a promise to ensure we only check for keys once, even if multiple
+    // requests are made before the first one completes.
+    this.keysPromise ??= this.get(".keys.json").then((json) =>
+      json ? JSON.parse(json) : []
+    );
+    const keys = await this.keysPromise;
+    yield* keys;
   }
 }
