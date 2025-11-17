@@ -1,3 +1,3 @@
-# Introduction to the async graph pattern
+# Introduction to the Map Tree pattern
 
-This repo contains the code for the [introduction to the async graph pattern](https://graphorigami.org/pattern/).
+This repo contains the code for the [introduction to the Map Tree pattern](https://weborigami.org/pattern/).

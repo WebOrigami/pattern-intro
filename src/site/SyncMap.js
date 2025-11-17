@@ -32,6 +32,13 @@ export default class SyncMap extends Map {
     }
   }
 
+  // Return true if the given key appears in the set returned by keys().
+  // It doesn't matter whether the value returned by get() is defined or not.
+  has(key) {
+    const keys = Array.from(this.keys());
+    return keys.includes(key);
+  }
+
   // Define the size to be the number of keys
   get size() {
     let count = 0;
