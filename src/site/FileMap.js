@@ -28,14 +28,13 @@ export default class FileMap extends SyncMap {
       stats = fs.statSync(filePath);
     } catch (/** @type {any} */ error) {
       if (error.code === "ENOENT") {
-        // File not found
-        return undefined;
+        return undefined; // File not found
       }
       throw error;
     }
 
     return stats.isDirectory()
-      ? new this.constructor(filePath) // Return subdirectory as a tree
+      ? new this.constructor(filePath) // Return subdirectory as a map
       : fs.readFileSync(filePath); // Return file contents
   }
 

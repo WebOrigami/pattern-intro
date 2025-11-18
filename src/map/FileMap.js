@@ -13,8 +13,7 @@ export default class FileMap extends Map {
       return fs.readFileSync(filename);
     } catch (error) {
       if (error.code === "ENOENT") {
-        // File not found
-        return undefined;
+        return undefined; // File not found
       }
       throw error;
     }
